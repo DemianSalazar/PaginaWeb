@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DeberCrud.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext <ApplicationUser , UserRole, string >
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -20,9 +20,10 @@ namespace DeberCrud.Data
             builder.Entity<Persona>(en =>
             {
                 en.HasKey(e => e.Codigo);
-                en.Property(e => e.Nombre).HasMaxLength(100).IsUnicode(false);
-                en.Property(e => e.Apellido).HasMaxLength(100).IsUnicode(false);
-                en.Property(e => e.Direccion).HasMaxLength(250).IsUnicode(false);
+                en.Property(e => e.Nombre).IsRequired().HasMaxLength(100).IsUnicode(false);
+                en.Property(e => e.Apellido).IsRequired().HasMaxLength(100).IsUnicode(false);
+                en.Property(e => e.Direccion).IsRequired().HasMaxLength(250).IsUnicode(false);
+                en.Property(e => e.Estado).IsRequired().IsUnicode(false);
             });
 
         }

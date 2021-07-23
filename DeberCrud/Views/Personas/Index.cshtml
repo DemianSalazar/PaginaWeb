@@ -37,12 +37,24 @@
                 @Html.DisplayFor(modelItem => item.Direccion)
             </td>
             <td>
-                @Html.ActionLink("Editar", "Edit", new { id = item.Codigo }, new { onclick = " return confirm('Esta seguro que desea editar');" });  |
+                @Html.ActionLink("Editar", "Edit", new { id = item.Codigo }, new { onclick = " return confirm('Esta seguro que desea editar?');" });  |
 
-                @Html.ActionLink("Detalle", "Details", new { Codigo = item.Codigo }, new { onclick = " return confirm('Esta seguro que desea acceder');" });  |
-                @Html.ActionLink("Eliminar", "Delete", new { id = item.Codigo }, new { onclick = " return confirm('Esta seguro que desea Eliminar');" });  |
+                @Html.ActionLink("Detalle", "Details", new { Codigo = item.Codigo }, new { onclick = " return confirm('Esta seguro que desea acceder?');" });  |
 
-                
+                @if (item.Estado == 1)
+                {
+                    @Html.ActionLink("Desactivar", "Desactivar", new { id = item.Codigo }, new { onclick = " return confirm('Esta seguro que desea Desactivar?');" });  
+
+                }
+                else
+                {
+                    @Html.ActionLink("Activar", "Activar", new { id = item.Codigo }, new { onclick = " return confirm('Esta seguro que desea Activar?');" });  
+                }
+
+
+
+
+
             </td>
         </tr>
 }

@@ -13,6 +13,10 @@ namespace DeberCrud.Controllers
     {
         // GET: GenerosController
         private readonly ApplicationDbContext _context;
+        public GenerosController (ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public ActionResult Index()
         {
             List<Genero> ltsgenero = _context.Generos.ToList();
@@ -28,73 +32,112 @@ namespace DeberCrud.Controllers
         }
 
         // GET: GenerosController/Create
-        public ActionResult Create(Genero genero)
+        public ActionResult Create()
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(genero);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            
 
-            return View(genero);
+            return View();
         }
 
         // POST: GenerosController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Genero genero )
         {
             try
             {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(genero);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(genero);
             }
         }
 
         // GET: GenerosController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Genero genero = _context.Generos.FirstOrDefault(x => x.Codigo == id);
+            return View(genero);
+            
         }
 
         // POST: GenerosController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Genero genero)
         {
+            if (id != genero.Codigo)
+            {
+                return RedirectToAction("Index");
+            }
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Update(genero);
+                 _context.SaveChangesAsync();
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(genero);
             }
         }
 
         // GET: GenerosController/Delete/5
         public ActionResult Delete(int id)
         {
+
             return View();
         }
 
         // POST: GenerosController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Desactivar(int id)
         {
+            if (id == 0)
+                return RedirectToAction("Index");
+            Genero persona = _context.Generos.Where(y => y.Codigo == id).FirstOrDefault();
             try
             {
-                return RedirectToAction(nameof(Index));
+                persona.Estado = 0;
+                _context.Update(persona);
+                _context.SaveChanges();
             }
-            catch
+            catch (Exception)
             {
-                return View();
+
+                return RedirectToAction("Index");
             }
+
+            return RedirectToAction("Index");
+        }
+        
+
+        public IActionResult Activar(int id)
+        {
+            if (id == 0)
+                return RedirectToAction("Index");
+            Genero persona = _context.Generos.Where(y => y.Codigo == id).FirstOrDefault();
+            try
+            {
+                persona.Estado = 1;
+                _context.Update(persona);
+                _context.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

@@ -2,6 +2,7 @@
 using DeberCrud.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,8 @@ namespace DeberCrud.Controllers
         [Authorize(Roles = "Jefe")]
         public IActionResult Create()
         {
+            ViewData["CodigoGenero"] = new SelectList(_applicationDb.Generos.Where(x => x.Estado == 1).ToList(),"Codigo","Descripcion");
+
             return View();
         }
         [Authorize(Roles = "Jefe")]
